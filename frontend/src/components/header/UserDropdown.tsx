@@ -14,7 +14,7 @@ export default function UserDropdown() {
   const logout = async () => {
     const supabase = createClient()
     await supabase.auth.signOut()
-    router.push('/auth/login')
+    router.push('/signin')
   }
 
 function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
