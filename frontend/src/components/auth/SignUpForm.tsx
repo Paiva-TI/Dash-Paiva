@@ -3,15 +3,53 @@ import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
+import { createClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/supabase/utils";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React, { useState } from "react";
 
-export default function SignUpForm() {
+export default function SignUpForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const supabase = createClient()
+    setIsLoading(true)
+    setError(null)
+
+    if (showPassword !== showRepeatPassword) {
+      setError('As senhas não correspondem')
+      setIsLoading(false)
+      return
+    }
+
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/dashboard`,
+        },
+      })
+      if (error) throw error
+      redirect('/signup-success')
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'An error occurred')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
-    <div className="flex flex-col flex-1 lg:w-1/2 w-full overflow-y-auto no-scrollbar">
+    <div className={cn('flex flex-col flex-1 lg:w-1/2 w-full overflow-y-auto no-scrollbar', className)} {...props}>
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
         <Link
           href="/signin"
@@ -58,7 +96,7 @@ export default function SignUpForm() {
                 </span>
               </div>
             </div>
-            <form>
+            <form onSubmit={handleSignUp}>
               <div className="space-y-5">
                   {/* <!-- Nome --> */}
                   <div className="sm:col-span-1">
@@ -67,9 +105,9 @@ export default function SignUpForm() {
                     </Label>
                     <Input
                       type="text"
-                      id="fname"
-                      name="fname"
+                      id="name"
                       placeholder="Digite seu nome de usuário"
+                      onChange={(e) => setName(e.target.value)}
                     />
                   </div>
 
@@ -83,6 +121,7 @@ export default function SignUpForm() {
                     id="email"
                     name="email"
                     placeholder="Digite seu email"
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 {/* <!-- Senha --> */}
@@ -94,6 +133,7 @@ export default function SignUpForm() {
                     <Input
                       placeholder="Enter your password"
                       type={showPassword ? "text" : "password"}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -116,6 +156,7 @@ export default function SignUpForm() {
                     <Input
                       placeholder="Repita a senha"
                       type={showRepeatPassword ? "text" : "password"}
+                      onChange={(e) => setShowRepeatPassword(e.target.value)}
                     />
                     <span
                       onClick={() => setShowRepeatPassword(!showRepeatPassword)}
