@@ -66,8 +66,8 @@ useEffect(() => {
         </span>
 
         <span className="block mr-1 font-medium text-theme-sm">
-        {profile?.first_name && profile?.last_name
-          ? `Olá, ${profile.first_name} ${profile.last_name}`
+        {profile?.first_name
+          ? `Olá, ${profile.first_name}`
           : "Olá, Usuário"}
         </span>
 
