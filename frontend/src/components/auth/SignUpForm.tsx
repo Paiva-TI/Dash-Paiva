@@ -10,7 +10,8 @@ import { redirect } from "next/navigation";
 import React, { useState } from "react";
 
 export default function SignUpForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
-  const [name, setName] = useState('')
+  const [first_name, setFirstName] = useState('')
+  const [last_name, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false);
@@ -19,34 +20,48 @@ export default function SignUpForm({ className, ...props }: React.ComponentProps
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const supabase = createClient()
-    setIsLoading(true)
-    setError(null)
+const handleSignUp = async (e: React.FormEvent) => {
+  e.preventDefault()
+  const supabase = createClient()
+  setIsLoading(true)
+  setError(null)
 
-    if (showPassword !== showRepeatPassword) {
-      setError('As senhas não correspondem')
-      setIsLoading(false)
-      return
-    }
-
-    try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/dashboard`,
-        },
-      })
-      if (error) throw error
-      redirect('/signup-success')
-    } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : 'An error occurred')
-    } finally {
-      setIsLoading(false)
-    }
+  if (showPassword !== showRepeatPassword) {
+    setError('As senhas não correspondem')
+    setIsLoading(false)
+    return
   }
+
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/dashboard`,
+        data: { first_name ,last_name },
+      },
+    })
+
+    if (error) throw error
+
+    if (data?.user) {
+      await supabase.from('profiles').insert([
+        {
+          id: data.user.id,
+          first_name: first_name,
+          last_name: last_name
+        },
+      ])
+    }
+
+    redirect('/signup-success')
+  } catch (error: unknown) {
+    setError(error instanceof Error ? error.message : 'Ocorreu um erro')
+  } finally {
+    setIsLoading(false)
+  }
+}
+
 
   return (
     <div className={cn('flex flex-col flex-1 lg:w-1/2 w-full overflow-y-auto no-scrollbar', className)} {...props}>
@@ -98,18 +113,32 @@ export default function SignUpForm({ className, ...props }: React.ComponentProps
             </div>
             <form onSubmit={handleSignUp}>
               <div className="space-y-5">
-                  {/* <!-- Nome --> */}
+                <div className="flex space-x-2">
+                  {/* <!-- Primeiro nome --> */}
                   <div className="sm:col-span-1">
                     <Label>
-                      Nome de usuário<span className="text-error-500">*</span>
+                      Nome<span className="text-error-500">*</span>
                     </Label>
                     <Input
                       type="text"
-                      id="name"
-                      placeholder="Digite seu nome de usuário"
-                      onChange={(e) => setName(e.target.value)}
+                      id="first_name"
+                      placeholder="Digite seu nome"
+                      onChange={(e) => setFirstName(e.target.value)}
                     />
                   </div>
+                  {/* <!-- Sobrenome --> */}
+                  <div className="sm:col-span-1">
+                    <Label>
+                      Sobrenome<span className="text-error-500">*</span>
+                    </Label>
+                    <Input
+                      type="text"
+                      id="last_name"
+                      placeholder="Digite seu sobrenome"
+                      onChange={(e) => setLastName(e.target.value)}
+                    />
+                  </div>
+                </div>
 
                 {/* <!-- Email --> */}
                 <div>
@@ -131,7 +160,7 @@ export default function SignUpForm({ className, ...props }: React.ComponentProps
                   </Label>
                   <div className="relative">
                     <Input
-                      placeholder="Enter your password"
+                      placeholder="Digite sua senha"
                       type={showPassword ? "text" : "password"}
                       onChange={(e) => setPassword(e.target.value)}
                     />
@@ -147,16 +176,15 @@ export default function SignUpForm({ className, ...props }: React.ComponentProps
                     </span>
                   </div>
                 </div>
-                {/* <!-- Repetir senha --> */}
+                {/* <!-- Repetir Senha --> */}
                 <div>
                   <Label>
-                    Repitir senha<span className="text-error-500">*</span>
+                    Senha<span className="text-error-500">*</span>
                   </Label>
                   <div className="relative">
                     <Input
-                      placeholder="Repita a senha"
+                      placeholder="Repita sua senha"
                       type={showRepeatPassword ? "text" : "password"}
-                      onChange={(e) => setShowRepeatPassword(e.target.value)}
                     />
                     <span
                       onClick={() => setShowRepeatPassword(!showRepeatPassword)}
