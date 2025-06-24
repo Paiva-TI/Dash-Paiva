@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import SignUpSucessForm from "@/components/auth/SignUpSucess"
 
 export const metadata: Metadata = {
   title: "Conta criada | Dashboard Paiva Energia",
@@ -6,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function SignUpSucess() {
-  return <SignUpSucess />;
+  return <SignUpSucessForm />;
 }
