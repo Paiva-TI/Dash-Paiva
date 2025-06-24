@@ -6,8 +6,6 @@ import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
 import StatisticsChart from "@/components/ecommerce/StatisticsChart";
 import RecentOrders from "@/components/ecommerce/RecentOrders";
 import DemographicCard from "@/components/ecommerce/DemographicCard";
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title:
@@ -16,12 +14,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-    const supabase = await createClient()
-
-    const { data, error } = await supabase.auth.getUser()
-    if (error || !data?.user) {
-        redirect('/signin')
-    }
   return (
     <div className="grid grid-cols-12 gap-4 md:gap-6">
       <div className="col-span-12 space-y-6 xl:col-span-7">
