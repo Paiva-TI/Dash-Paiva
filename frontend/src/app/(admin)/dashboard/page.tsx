@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
-import React from "react";
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import React, { useEffect, useState } from "react";
 import MonthlyTarget from "@/components/ecommerce/MonthlyTarget";
 import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
 import StatisticsChart from "@/components/ecommerce/StatisticsChart";
@@ -9,7 +11,7 @@ import DemographicCard from "@/components/ecommerce/DemographicCard";
 
 export const metadata: Metadata = {
   title:
-    "Login | Dashboard Paiva Energia",
+    "Home | Dashboard Paiva Energia",
   description: "",
 };
 
