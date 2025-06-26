@@ -2,65 +2,67 @@
 import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
-import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
+import { ChevronLeftIcon, EnvelopeIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/supabase/utils";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import React, { useState } from "react";
+import Alert from "../ui/alert/Alert";
 
 export default function SignUpForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
-  const [first_name, setFirstName] = useState('')
-  const [last_name, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [first_name, setFirstName] = useState('');
+  const [last_name, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
 
-const handleSignUp = async (e: React.FormEvent) => {
-  e.preventDefault()
-  const supabase = createClient()
-  setIsLoading(true)
-  setError(null)
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const supabase = createClient()
+    setIsLoading(true)
+    setError(null)
+    setSuccess(null)
 
-  if (showPassword !== showRepeatPassword) {
-    setError('As senhas não correspondem')
-    setIsLoading(false)
-    return
-  }
-
-  try {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`,
-        data: { first_name ,last_name },
-      },
-    })
-
-    if (error) throw error
-
-    if (data?.user) {
-      await supabase.from('profiles').insert([
-        {
-          id: data.user.id,
-          first_name: first_name,
-          last_name: last_name
-        },
-      ])
+    if (password !== repeatPassword) {
+      setError('As senhas não correspondem')
+      setIsLoading(false)
+      return
     }
 
-    redirect('/signup-success')
-  } catch (error: unknown) {
-    setError(error instanceof Error ? error.message : 'Ocorreu um erro')
-  } finally {
-    setIsLoading(false)
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/dashboard`,
+          data: { first_name, last_name },
+        },
+      })
+
+      if (error) throw error
+
+      if (data?.user) {
+        await supabase.from('profiles').insert([
+          {
+            id: data.user.id,
+            first_name,
+            last_name
+          },
+        ])
+      }
+      setSuccess("Conta criada com sucesso!")
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'Ocorreu um erro')
+    } finally {
+      setIsLoading(false)
+    }
   }
-}
 
 
   return (
@@ -112,6 +114,23 @@ const handleSignUp = async (e: React.FormEvent) => {
               </div>
             </div>
             <form onSubmit={handleSignUp}>
+              {error && (
+                <Alert
+                  variant="error"
+                  title="Erro ao criar conta"
+                  message={error}
+                  showLink={false}
+                />
+              )}
+
+              {success && (
+                <Alert
+                  variant="success"
+                  title="Sucesso!"
+                  message={success}
+                  showLink={false}
+                />
+              )}
               <div className="space-y-5">
                 <div className="flex space-x-2">
                   {/* <!-- Primeiro nome --> */}
@@ -145,13 +164,19 @@ const handleSignUp = async (e: React.FormEvent) => {
                   <Label>
                     Email<span className="text-error-500">*</span>
                   </Label>
+                  <div className="relative">
                   <Input
+                    className="pl-[62px]"
                     type="email"
                     id="email"
                     name="email"
                     placeholder="Digite seu email"
                     onChange={(e) => setEmail(e.target.value)}
                   />
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                  <EnvelopeIcon />
+                  </span>
+                  </div>
                 </div>
                 {/* <!-- Senha --> */}
                 <div>
@@ -179,12 +204,13 @@ const handleSignUp = async (e: React.FormEvent) => {
                 {/* <!-- Repetir Senha --> */}
                 <div>
                   <Label>
-                    Senha<span className="text-error-500">*</span>
+                    Repetir senha<span className="text-error-500">*</span>
                   </Label>
                   <div className="relative">
                     <Input
-                      placeholder="Repita sua senha"
+                      placeholder="Digite sua senha novamente"
                       type={showRepeatPassword ? "text" : "password"}
+                      onChange={(e) => setRepeatPassword(e.target.value)}
                     />
                     <span
                       onClick={() => setShowRepeatPassword(!showRepeatPassword)}
@@ -218,7 +244,10 @@ const handleSignUp = async (e: React.FormEvent) => {
                 </div>
                 {/* <!-- Button --> */}
                 <div>
-                  <button className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
+                  <button disabled={!isChecked} className={cn(
+    "flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg shadow-theme-xs",
+    isChecked ? "bg-brand-500 hover:bg-brand-600" : "bg-gray-400 cursor-not-allowed"
+  )}>
                     Criar conta
                   </button>
                 </div>

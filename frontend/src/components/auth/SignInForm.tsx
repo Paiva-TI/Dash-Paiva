@@ -7,7 +7,7 @@ import { EyeCloseIcon, EyeIcon } from "@/icons";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/supabase/utils";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 export default function SignInForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
@@ -32,7 +32,7 @@ export default function SignInForm({ className, ...props }: React.ComponentProps
         password,
       })
       if (error) throw error
-      router.push('/dashboard')
+      redirect('/dashboard')
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'Ocorreu um erro')
     } finally {
