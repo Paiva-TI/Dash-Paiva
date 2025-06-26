@@ -20,15 +20,15 @@ jobs:
       - name: ⬇️ Checkout repository
         uses: actions/checkout@v4
 
+      - name: 🚩 Entrando no repositório
+        run: cd frontend/
+
       - name: 🟢 Use Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
       
-      - name: 🚩 Entrando no repositório
-        run: cd frontend/
-
       - name: 📦 Install dependencies
         run: npm ci
 
