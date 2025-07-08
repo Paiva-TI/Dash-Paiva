@@ -33,12 +33,6 @@ export function middleware (request: NextRequest) {
     redirectUrl.pathname = '/'
   }
 
-  if(authToken && !publicRoute){
-    // Checar se o JWT está expirado 
-
-    return NextResponse.next()
-  }
-
     return NextResponse.next()
 }
 
@@ -51,7 +45,7 @@ export const config: MiddlewareConfig = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      */
-    // '/((?!api|_next/static|_next/image|favicon.ico).*)',
     '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+   
   ],
 } 
