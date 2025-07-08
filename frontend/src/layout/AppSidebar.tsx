@@ -30,37 +30,32 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+    path: "/dashboard"
   },
-  {
-    icon: <CalenderIcon />,
-    name: "Calendar",
-    path: "/calendar",
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: "/profile",
-  },
-
-  {
-    name: "Forms",
+  // {
+  //   icon: <CalenderIcon />,
+  //   name: "Calendar",
+  //   path: "/calendar",
+  // },
+  // {
+  //   name: "Forms",
+  //   icon: <ListIcon />,
+  //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+  // },
+    {
+    name: "Gerenciamento",
     icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  },
-  {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  },
-  {
-    name: "Pages",
-    icon: <PageIcon />,
     subItems: [
-      { name: "Blank Page", path: "/blank", pro: false },
-      { name: "404 Error", path: "/error-404", pro: false },
+      { name: "Frotas", path: "/manager/frotas", pro: false },
+      { name: "Mobilização", path: "/manager/mobilização", pro: false },
+      { name: "Moradia", path: "/manager/moradia", pro: false }
     ],
   },
+  {
+    name: "Administração",
+    icon: <TableIcon />,
+    subItems: [{ name: "Colaboradores", path: "/admin/colaboradores", pro: false }],
+  }
 ];
 
 const othersItems: NavItem[] = [
@@ -82,14 +77,6 @@ const othersItems: NavItem[] = [
       { name: "Buttons", path: "/buttons", pro: false },
       { name: "Images", path: "/images", pro: false },
       { name: "Videos", path: "/videos", pro: false },
-    ],
-  },
-  {
-    icon: <PlugInIcon />,
-    name: "Authentication",
-    subItems: [
-      { name: "Sign In", path: "/signin", pro: false },
-      { name: "Sign Up", path: "/signup", pro: false },
     ],
   },
 ];
@@ -365,7 +352,7 @@ const AppSidebar: React.FC = () => {
                 }`}
               >
                 {isExpanded || isHovered || isMobileOpen ? (
-                  "Others"
+                  "Outros"
                 ) : (
                   <HorizontaLDots />
                 )}
@@ -374,7 +361,6 @@ const AppSidebar: React.FC = () => {
             </div>
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
       </div>
     </aside>
   );
