@@ -6,12 +6,12 @@ const publicRoutes = [
   { path: '/dashboard', whenAuthenticated: 'redirect' },
   { path: '/profile', whenAuthenticated: 'redirect' },
   { path: '/admin/colaboradores', whenAuthenticated: 'redirect' },
-  { path: "/alerts", whenAuthenticated: 'next' },
-  { path: "/avatars", whenAuthenticated: 'next' },
-  { path: "/badge", whenAuthenticated: 'next' },
-  { npath: "/buttons", whenAuthenticated: 'next' },
-  { path: "/images", whenAuthenticated: 'next' },
-  { path: "/videos", whenAuthenticated: 'next' },
+  { path: '/alerts', whenAuthenticated: 'next' },
+  { path: '/avatars', whenAuthenticated: 'next' },
+  { path: '/badge', whenAuthenticated: 'next' },
+  { path: '/buttons', whenAuthenticated: 'next' },
+  { path: '/images', whenAuthenticated: 'next' },
+  { path: '/videos', whenAuthenticated: 'next' },
 ] as const
 
 const REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE = '/signin'
@@ -55,4 +55,4 @@ export const config: MiddlewareConfig = {
     '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
 
   ],
-} 
+}
