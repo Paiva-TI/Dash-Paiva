@@ -1,18 +1,29 @@
 import { NextRequest, NextResponse, type MiddlewareConfig } from "next/server";
 
 const publicRoutes = [
-  { path: '/signin', whenAuthenticated: 'redirect' },
-  { path: '/signup', whenAuthenticated: 'redirect' },
-  { path: '/dashboard', whenAuthenticated: 'redirect' },
-  { path: '/profile', whenAuthenticated: 'redirect' },
+  { path: '/', whenAuthenticated: 'next' },
+  { path: '/_not-found', whenAuthenticated: 'next' },
   { path: '/admin/colaboradores', whenAuthenticated: 'redirect' },
   { path: '/alerts', whenAuthenticated: 'next' },
   { path: '/avatars', whenAuthenticated: 'next' },
   { path: '/badge', whenAuthenticated: 'next' },
+  { path: '/bar-chart', whenAuthenticated: 'next' },
+  { path: '/blank', whenAuthenticated: 'next' },
   { path: '/buttons', whenAuthenticated: 'next' },
+  { path: '/calendar', whenAuthenticated: 'next' },
+  { path: '/dashboard', whenAuthenticated: 'redirect' },
+  { path: '/error-404', whenAuthenticated: 'next' },
+  { path: '/form-elements', whenAuthenticated: 'next' },
   { path: '/images', whenAuthenticated: 'next' },
+  { path: '/line-chart', whenAuthenticated: 'next' },
+  { path: '/modals', whenAuthenticated: 'next' },
+  { path: '/profile', whenAuthenticated: 'redirect' },
+  { path: '/signin', whenAuthenticated: 'redirect' },
+  { path: '/signup', whenAuthenticated: 'redirect' },
+  { path: '/signup-sucess', whenAuthenticated: 'next' },
   { path: '/videos', whenAuthenticated: 'next' },
-] as const
+] as const;
+
 
 const REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE = '/signin'
 
