@@ -31,10 +31,10 @@ const estados: {
 ];
 
 
-const ChangeMapView = ({ coords }: { coords: readonly [number, number] }) => {
+const ChangeMapView = ({ coords }: { coords: LatLngTuple }) => {
   const map = useMap();
   useEffect(() => {
-    map.setView([...coords], 6); // converte readonly para mutável
+    map.setView(coords as [number, number], 6);
   }, [coords]);
   return null;
 };
