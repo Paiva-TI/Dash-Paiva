@@ -1,11 +1,8 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
-
-
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import type { LatLngTuple } from "leaflet";
-
 
 const estados: {
   nome: string;
@@ -30,16 +27,13 @@ const estados: {
   },
 ];
 
-
 const ChangeMapView = ({ coords }: { coords: LatLngTuple }) => {
   const map = useMap();
   useEffect(() => {
-    map.setView(coords as [number, number], 6);
-  }, [coords]);
+    map.setView(coords, 6);
+  }, [coords, map]);
   return null;
 };
-
-
 
 export default function Dashboard() {
   const [indiceAtual, setIndiceAtual] = useState(0);
