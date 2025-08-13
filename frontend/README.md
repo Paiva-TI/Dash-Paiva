@@ -10,4 +10,3 @@ Foi produzido com as tecnologias abaixo:
 - React 19
 - TypeScript
 - Tailwind CSS V4
-
