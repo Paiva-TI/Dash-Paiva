@@ -47,7 +47,7 @@ const navItems: NavItem[] = [
     icon: <ListIcon />,
     subItems: [
       { name: "Frotas", path: "/manager/frotas", pro: false },
-      { name: "Mobilização", path: "/manager/mobilização", pro: false },
+      { name: "Mobilização", path: "/manager/mobilizacao", pro: false },
       { name: "Moradia", path: "/manager/moradia", pro: false }
     ],
   },
