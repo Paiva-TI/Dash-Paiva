@@ -1,8 +1,28 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import dynamic from "next/dynamic";
+import { useMap } from "react-leaflet"; // hook importado direto
 import type { LatLngTuple } from "leaflet";
+import "leaflet/dist/leaflet.css";
+
+// Importa dinamicamente apenas os componentes
+const MapContainer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.MapContainer),
+  { ssr: false }
+);
+const TileLayer = dynamic(
+  () => import("react-leaflet").then((mod) => mod.TileLayer),
+  { ssr: false }
+);
+const Marker = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Marker),
+  { ssr: false }
+);
+const Popup = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Popup),
+  { ssr: false }
+);
 
 const estados: {
   nome: string;
